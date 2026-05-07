@@ -41,17 +41,30 @@ export default function NewItemPage() {
 
   async function uploadImage(file: File) {
     setUploading(true)
+    setError(null)
     try {
       const res = await fetch('/api/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ itemId, fileName: file.name, contentType: file.type }),
       })
-      const { signedUrl, publicUrl } = await res.json()
-      await fetch(signedUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
-      setImages((prev) => [...prev, publicUrl])
-    } catch {
-      setError('Image upload failed')
+      const data = await res.json()
+      if (!res.ok || !data.signedUrl) {
+        setError(data.error ?? 'Failed to get upload URL')
+        return
+      }
+      const uploadRes = await fetch(data.signedUrl, {
+        method: 'PUT',
+        body: file,
+        headers: { 'Content-Type': file.type },
+      })
+      if (!uploadRes.ok) {
+        setError('Image upload failed — please try again')
+        return
+      }
+      setImages((prev) => [...prev, data.publicUrl])
+    } catch (e) {
+      setError('Image upload failed: ' + String(e))
     } finally {
       setUploading(false)
     }
