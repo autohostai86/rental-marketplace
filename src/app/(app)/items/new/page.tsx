@@ -84,7 +84,7 @@ export default function NewItemPage() {
     setLoading(false)
 
     if (!res.ok) { setError(data.error); return }
-    router.push(`/items/${data.item.id}`)
+    router.push('/profile')
   }
 
   return (
