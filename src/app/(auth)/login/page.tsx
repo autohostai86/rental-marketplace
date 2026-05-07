@@ -35,16 +35,16 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Welcome to RentLocal</h1>
-          <p className="mt-2 text-sm text-gray-500">Enter your email to get started</p>
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl font-black tracking-tighter text-black">BORRO</h1>
+          <p className="mt-2 text-sm text-gray-400">Enter your email to get started</p>
         </div>
 
         <form onSubmit={handleSendOtp} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">
               Email Address
             </label>
             <input
@@ -58,19 +58,19 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"
             disabled={loading || !email}
-            className="btn-primary w-full"
+            className="btn-primary w-full rounded-full"
           >
-            {loading ? 'Sending OTP…' : 'Send OTP'}
+            {loading ? 'Sending…' : 'Continue with Email'}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-xs text-gray-400">
-          We'll send a 6-digit code to your email
+        <p className="mt-6 text-center text-xs text-gray-300">
+          We'll send a magic link to your inbox
         </p>
       </div>
     </div>

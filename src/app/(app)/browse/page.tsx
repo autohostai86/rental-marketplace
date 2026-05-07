@@ -39,9 +39,9 @@ export default async function BrowsePage({
     <div className="px-4 py-4">
       {/* Category pills */}
       <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
-        <CategoryPill label="All" href="/browse" active={!sp.category} />
+        <Pill label="All" href="/browse" active={!sp.category} />
         {CATEGORIES.map((cat) => (
-          <CategoryPill
+          <Pill
             key={cat}
             label={cat}
             href={`/browse?category=${encodeURIComponent(cat)}${sp.q ? `&q=${sp.q}` : ''}`}
@@ -53,10 +53,10 @@ export default async function BrowsePage({
       {/* Duration filter */}
       <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
         {[
-          { label: 'Any', value: '' },
-          { label: 'Hourly', value: 'hourly' },
-          { label: 'Daily', value: 'daily' },
-          { label: 'Weekly', value: 'weekly' },
+          { label: 'Any',     value: '' },
+          { label: 'Hourly',  value: 'hourly'  },
+          { label: 'Daily',   value: 'daily'   },
+          { label: 'Weekly',  value: 'weekly'  },
           { label: 'Monthly', value: 'monthly' },
         ].map(({ label, value }) => {
           const active = (sp.duration_unit ?? '') === value
@@ -70,8 +70,8 @@ export default async function BrowsePage({
               href={`/browse?${params.toString()}`}
               className={`shrink-0 px-3 py-1 text-xs rounded-full border transition-colors ${
                 active
-                  ? 'bg-indigo-600 text-white border-indigo-600'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-400'
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-gray-500 border-gray-200 hover:border-black hover:text-black'
               }`}
             >
               {label}
@@ -83,7 +83,7 @@ export default async function BrowsePage({
       {/* Results */}
       <div className="mt-4">
         {!items?.length ? (
-          <p className="text-center text-gray-400 py-16 text-sm">No items found</p>
+          <p className="text-center text-gray-300 py-16 text-sm">No items found</p>
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {items.map((item) => (
@@ -96,14 +96,14 @@ export default async function BrowsePage({
   )
 }
 
-function CategoryPill({ label, href, active }: { label: string; href: string; active: boolean }) {
+function Pill({ label, href, active }: { label: string; href: string; active: boolean }) {
   return (
     <Link
       href={href}
       className={`shrink-0 px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${
         active
-          ? 'bg-indigo-600 text-white border-indigo-600'
-          : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-400'
+          ? 'bg-black text-white border-black'
+          : 'bg-white text-gray-500 border-gray-200 hover:border-black hover:text-black'
       }`}
     >
       {label}
@@ -116,37 +116,29 @@ function ItemCard({ item }: { item: Item }) {
   const isRentedOut = item.status === 'rented_out'
 
   return (
-    <Link href={`/items/${item.id}`} className="block bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-      <div className="relative aspect-square bg-gray-100">
+    <Link href={`/items/${item.id}`} className="block bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-gray-300 transition-colors group">
+      <div className="relative aspect-square bg-gray-50">
         {item.images[0] ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={item.images[0]}
-            alt={item.title}
-            className="w-full h-full object-cover"
-          />
+          <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-300 text-3xl">
-            📦
-          </div>
+          <div className="w-full h-full flex items-center justify-center text-gray-200 text-3xl">📦</div>
         )}
         {isRentedOut && (
-          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="text-white text-xs font-semibold bg-red-500 px-2 py-1 rounded-full">
-              Rented Out
-            </span>
+          <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+            <span className="text-white text-xs font-bold tracking-wide uppercase">Rented Out</span>
           </div>
         )}
-        <span className="absolute top-2 left-2 bg-white/90 text-gray-700 text-[10px] font-medium px-1.5 py-0.5 rounded-full">
+        <span className="absolute top-2 left-2 bg-white text-gray-600 text-[10px] font-medium px-1.5 py-0.5 rounded-full border border-gray-100">
           {item.category}
         </span>
       </div>
       <div className="p-2.5">
-        <p className="text-sm font-medium text-gray-900 truncate">{item.title}</p>
+        <p className="text-sm font-medium text-black truncate">{item.title}</p>
         {lowest && (
-          <p className="text-xs text-indigo-600 font-semibold mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5">
             from {formatPrice(lowest.price)}
-            <span className="text-gray-400 font-normal">{formatDurationUnit(lowest.unit)}</span>
+            <span className="text-gray-400">{formatDurationUnit(lowest.unit)}</span>
           </p>
         )}
         {item.avg_rating != null && (

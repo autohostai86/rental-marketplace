@@ -14,21 +14,22 @@ export default function VerifyPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm text-center">
-        <div className="text-5xl mb-6">📧</div>
-        <h1 className="text-2xl font-bold text-gray-900">Check your email</h1>
-        <p className="mt-3 text-sm text-gray-500">
+        <h1 className="text-3xl font-black tracking-tighter text-black mb-8">BORRO</h1>
+        <div className="text-4xl mb-6">✉️</div>
+        <h2 className="text-lg font-bold text-black">Check your email</h2>
+        <p className="mt-2 text-sm text-gray-400">
           We sent a login link to
         </p>
-        <p className="mt-1 font-medium text-gray-800">{email}</p>
-        <p className="mt-4 text-sm text-gray-500">
-          Click the link in the email to log in. You can close this page.
+        <p className="mt-1 text-sm font-medium text-black">{email}</p>
+        <p className="mt-4 text-sm text-gray-400">
+          Click the link in the email to log in.
         </p>
 
         <button
           onClick={() => router.replace('/login')}
-          className="mt-8 text-sm text-indigo-600 hover:underline"
+          className="mt-10 text-xs text-gray-400 hover:text-black transition-colors underline underline-offset-2"
         >
           Use a different email
         </button>

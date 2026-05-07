@@ -24,8 +24,8 @@ export default function TopNav({ unreadCount = 0 }: TopNavProps) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-        <Link href="/" className="text-indigo-600 font-bold text-lg shrink-0">
-          RentLocal
+        <Link href="/" className="text-black font-black text-xl tracking-tighter shrink-0">
+          BORRO
         </Link>
 
         {isBrowse && (
@@ -35,7 +35,7 @@ export default function TopNav({ unreadCount = 0 }: TopNavProps) {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search items…"
-              className="w-full text-sm rounded-full border border-gray-200 bg-gray-50 px-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              className="w-full text-sm rounded-full border border-gray-200 bg-gray-50 px-4 py-1.5 focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black"
             />
           </form>
         )}
@@ -43,9 +43,9 @@ export default function TopNav({ unreadCount = 0 }: TopNavProps) {
         {!isBrowse && <div className="flex-1" />}
 
         <Link href="/notifications" className="relative p-1">
-          <BellIcon className="w-6 h-6 stroke-gray-600" />
+          <BellIcon className="w-6 h-6 stroke-black" />
           {unreadCount > 0 && (
-            <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+            <span className="absolute top-0 right-0 w-4 h-4 bg-black text-white text-[10px] font-bold rounded-full flex items-center justify-center">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
