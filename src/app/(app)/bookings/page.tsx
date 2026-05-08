@@ -10,7 +10,7 @@ export default async function BookingsPage() {
 
   const { data: bookings } = await supabase
     .from('bookings')
-    .select('*, item:items(id, title, images, category), lender:profiles!bookings_lender_id_fkey(id, full_name, upi_id)')
+    .select('*, item:items(id, title, images, category), lender:profiles!lender_id(id, full_name, upi_id)')
     .eq('borrower_id', user.id)
     .order('created_at', { ascending: false })
 
