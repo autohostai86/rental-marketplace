@@ -61,15 +61,14 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
     setUploading(true)
     setError(null)
     try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ itemId: id, fileName: file.name, contentType: file.type }),
-      })
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('itemId', id)
+
+      const res = await fetch('/api/upload', { method: 'POST', body: formData })
       const data = await res.json()
-      if (!res.ok || !data.signedUrl) { setError(data.error ?? 'Failed to get upload URL'); return }
-      const uploadRes = await fetch(data.signedUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } })
-      if (!uploadRes.ok) { setError('Upload failed — please try again'); return }
+
+      if (!res.ok || !data.publicUrl) { setError(data.error ?? 'Upload failed'); return }
       setImages((prev) => [...prev, data.publicUrl])
     } catch (e) {
       setError('Upload failed: ' + String(e))
