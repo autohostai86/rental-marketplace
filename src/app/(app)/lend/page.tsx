@@ -8,13 +8,11 @@ export default async function LendPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
 
-  const { data: bookings, error: bookingsError } = await supabase
+  const { data: bookings } = await supabase
     .from('bookings')
-    .select('*, item:items(id, title, images), borrower:profiles!borrower_id(id, full_name, avatar_url)')
+    .select('*, item:items(id, title, images), borrower:profiles(id, full_name, avatar_url)')
     .eq('lender_id', user.id)
     .order('created_at', { ascending: false })
-
-  if (bookingsError) console.error('Lend page bookings error:', bookingsError)
 
   const pending   = bookings?.filter((b) => b.status === 'pending')   ?? []
   const active    = bookings?.filter((b) => ['accepted','active'].includes(b.status)) ?? []

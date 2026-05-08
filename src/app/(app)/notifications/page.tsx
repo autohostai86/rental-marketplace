@@ -24,16 +24,19 @@ export default async function NotificationsPage() {
 
   const items = (notifications ?? []) as Notification[]
 
+  // Lender notification types — link to lend dashboard
+  const lenderTypes = new Set(['booking_request', 'booking_cancelled', 'payment_reminder'])
+
   return (
     <div className="px-4 py-6">
-      <h1 className="text-xl font-bold text-gray-900 mb-4">Notifications</h1>
+      <h1 className="text-xl font-bold text-black mb-4">Notifications</h1>
 
       {items.length === 0 ? (
-        <p className="text-center text-gray-400 py-16 text-sm">No notifications yet</p>
+        <p className="text-center text-gray-300 py-16 text-sm">No notifications yet</p>
       ) : (
         <div className="space-y-1">
           {items.map((n) => (
-            <NotificationItem key={n.id} notification={n} />
+            <NotificationItem key={n.id} notification={n} isLenderNotif={lenderTypes.has(n.type)} />
           ))}
         </div>
       )}
@@ -41,7 +44,7 @@ export default async function NotificationsPage() {
   )
 }
 
-function NotificationItem({ notification: n }: { notification: Notification }) {
+function NotificationItem({ notification: n, isLenderNotif }: { notification: Notification; isLenderNotif: boolean }) {
   const iconMap: Record<string, string> = {
     booking_request:  '📬',
     booking_accepted: '✅',
@@ -53,24 +56,23 @@ function NotificationItem({ notification: n }: { notification: Notification }) {
     payment_reminder: '💳',
   }
 
+  // Lender notifications go to /lend, borrower notifications go to /bookings
   const href = n.booking_id
-    ? `/bookings/${n.booking_id}`
+    ? isLenderNotif ? `/lend/${n.booking_id}` : `/bookings/${n.booking_id}`
     : n.item_id ? `/items/${n.item_id}` : undefined
 
   const content = (
-    <div className={`flex items-start gap-3 p-3 rounded-xl ${n.is_read ? 'bg-white' : 'bg-indigo-50'}`}>
+    <div className={`flex items-start gap-3 p-3 rounded-xl ${n.is_read ? 'bg-white' : 'bg-gray-50 border border-gray-100'}`}>
       <span className="text-xl shrink-0 mt-0.5">{iconMap[n.type] ?? '🔔'}</span>
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium ${n.is_read ? 'text-gray-800' : 'text-indigo-900'}`}>{n.title}</p>
-        <p className="text-xs text-gray-500 mt-0.5">{n.body}</p>
+        <p className={`text-sm font-medium ${n.is_read ? 'text-gray-700' : 'text-black'}`}>{n.title}</p>
+        <p className="text-xs text-gray-400 mt-0.5">{n.body}</p>
         <p className="text-xs text-gray-300 mt-1">{formatRelativeTime(n.created_at)}</p>
       </div>
-      {!n.is_read && <span className="w-2 h-2 rounded-full bg-indigo-500 shrink-0 mt-1.5" />}
+      {!n.is_read && <span className="w-2 h-2 rounded-full bg-black shrink-0 mt-1.5" />}
     </div>
   )
 
-  if (href) {
-    return <a href={href}>{content}</a>
-  }
+  if (href) return <a href={href}>{content}</a>
   return content
 }
