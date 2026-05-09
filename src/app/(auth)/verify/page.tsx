@@ -16,7 +16,7 @@ export default function VerifyPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm text-center">
-        <h1 style={{ fontFamily: 'var(--font-display)' }} className="text-3xl font-black tracking-tight text-black mb-8">BORRO</h1>
+        <h1 className="text-3xl font-black tracking-tighter text-black mb-8">BORRO</h1>
         <div className="text-4xl mb-6">✉️</div>
         <h2 className="text-lg font-bold text-black">Check your email</h2>
         <p className="mt-2 text-sm text-gray-400">
