@@ -24,7 +24,7 @@ export default function TopNav({ unreadCount = 0 }: TopNavProps) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-        <Link href="/" className="text-black font-black text-xl tracking-tighter shrink-0">
+        <Link href="/" style={{ fontFamily: 'var(--font-display)' }} className="text-black font-black text-xl tracking-tight shrink-0">
           BORRO
         </Link>
 

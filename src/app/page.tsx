@@ -12,42 +12,62 @@ export default async function LandingPage() {
     .select('*, owner:profiles(id, full_name)')
     .eq('status', 'available')
     .order('created_at', { ascending: false })
-    .limit(12)
+    .limit(8)
 
   return (
     <div className="min-h-screen bg-white">
       {/* Nav */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="text-black font-black text-xl tracking-tighter">BORRO</span>
-          <div className="flex gap-2 items-center">
-            <Link href="/browse" className="text-sm text-gray-500 hover:text-black px-3 py-1.5 transition-colors">Browse</Link>
-            <Link href="/login" className="btn-primary text-sm py-1.5 px-4 rounded-full">Get started</Link>
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-5 h-14 flex items-center justify-between">
+          <span style={{ fontFamily: 'var(--font-display)' }} className="text-black font-black text-xl tracking-tight">BORRO</span>
+          <div className="flex gap-3 items-center">
+            <Link href="/browse" className="text-sm text-gray-500 hover:text-black transition-colors">Browse</Link>
+            <Link href="/login" className="btn-primary text-sm py-2 px-5 rounded-full">Get started</Link>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="bg-black text-white px-4 py-20 text-center">
-        <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4">Diamond District, Bangalore</p>
-        <h1 className="text-4xl font-black tracking-tight leading-tight">Rent anything.<br/>From neighbours.</h1>
-        <p className="mt-4 text-gray-400 max-w-xs mx-auto text-sm">
-          Drills, toys, gadgets and more — by the hour, day, or week.
-        </p>
-        <Link href="/browse" className="mt-8 inline-block bg-white text-black font-semibold px-8 py-3 rounded-full text-sm hover:bg-gray-100 transition-colors">
-          Browse Items
-        </Link>
+      <section className="max-w-5xl mx-auto px-5 pt-16 pb-12">
+        <div className="flex flex-col gap-2">
+          <span className="text-xs font-semibold tracking-widest text-gray-400 uppercase">Diamond District · Bangalore</span>
+          <h1 style={{ fontFamily: 'var(--font-display)' }} className="text-5xl sm:text-7xl font-black text-black leading-[0.95] tracking-tight mt-2">
+            Borrow<br />
+            <span className="italic font-normal">anything</span><br />
+            nearby.
+          </h1>
+          <p className="text-gray-400 text-base mt-5 max-w-xs leading-relaxed">
+            Rent drills, toys, gadgets & more from neighbours — by the hour, day or week.
+          </p>
+          <div className="flex gap-3 mt-6">
+            <Link href="/login" className="btn-primary px-7 py-3 rounded-full text-sm">Start renting</Link>
+            <Link href="/browse" className="btn-secondary px-7 py-3 rounded-full text-sm">Browse items</Link>
+          </div>
+        </div>
+
+        {/* Marquee strip */}
+        <div className="mt-12 overflow-hidden border-y border-gray-100 py-3">
+          <div className="flex gap-8 animate-marquee whitespace-nowrap" style={{ animation: 'marquee 20s linear infinite' }}>
+            {[...CATEGORIES, ...CATEGORIES].map((cat, i) => (
+              <span key={i} className="text-xs font-medium text-gray-300 tracking-widest uppercase shrink-0">
+                {cat} ·
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
-      {/* Categories */}
-      <section className="max-w-4xl mx-auto px-4 pt-8">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Categories</p>
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+      {/* Categories grid */}
+      <section className="max-w-5xl mx-auto px-5 py-6">
+        <div className="flex items-center justify-between mb-4">
+          <span style={{ fontFamily: 'var(--font-display)' }} className="text-xs font-bold tracking-widest text-gray-400 uppercase">Categories</span>
+        </div>
+        <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat}
               href={`/browse?category=${encodeURIComponent(cat)}`}
-              className="shrink-0 px-3 py-1.5 bg-white border border-gray-200 text-gray-700 text-xs font-medium rounded-full hover:border-black hover:text-black transition-colors"
+              className="shrink-0 px-4 py-2 bg-white border border-gray-200 text-gray-600 text-xs font-medium rounded-full hover:bg-black hover:text-white hover:border-black transition-all duration-200"
             >
               {cat}
             </Link>
@@ -56,37 +76,36 @@ export default async function LandingPage() {
       </section>
 
       {/* Listings */}
-      <section className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-sm font-semibold text-black">Available now</p>
+      <section className="max-w-5xl mx-auto px-5 py-6">
+        <div className="flex items-center justify-between mb-5">
+          <span style={{ fontFamily: 'var(--font-display)' }} className="text-xs font-bold tracking-widest text-gray-400 uppercase">Available now</span>
           <Link href="/browse" className="text-xs text-gray-400 hover:text-black transition-colors">See all →</Link>
         </div>
 
         {!items?.length ? (
-          <p className="text-center text-gray-300 py-16 text-sm">No listings yet — be the first!</p>
+          <div className="border border-dashed border-gray-200 rounded-2xl py-20 text-center">
+            <p className="text-gray-300 text-sm">No listings yet — be the first!</p>
+          </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {items.map((item) => {
               const lowest = getLowestPrice(item as Item)
               return (
-                <Link key={item.id} href={`/items/${item.id}`} className="bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-gray-300 transition-colors group">
-                  <div className="aspect-square bg-gray-50">
+                <Link key={item.id} href={`/items/${item.id}`} className="group block card-hover">
+                  <div className="aspect-square bg-gray-50 rounded-xl overflow-hidden mb-2.5">
                     {item.images?.[0] ? (
                       // eslint-disable-next-line @next/next/no-img-element
-                      <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity" />
+                      <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl text-gray-200">📦</div>
+                      <div className="w-full h-full flex items-center justify-center text-3xl text-gray-200">📦</div>
                     )}
                   </div>
-                  <div className="p-3">
-                    <p className="text-sm font-medium text-black truncate">{item.title}</p>
-                    {lowest && (
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        from {formatPrice(lowest.price)}
-                        <span className="text-gray-400">{formatDurationUnit(lowest.unit)}</span>
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-sm font-medium text-black truncate leading-tight">{item.title}</p>
+                  {lowest && (
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      {formatPrice(lowest.price)}<span className="text-gray-300">{formatDurationUnit(lowest.unit)}</span>
+                    </p>
+                  )}
                 </Link>
               )
             })}
@@ -94,15 +113,47 @@ export default async function LandingPage() {
         )}
       </section>
 
-      {/* CTA */}
-      <section className="border-t border-gray-100 px-4 py-16 text-center">
-        <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">For owners</p>
-        <h2 className="text-2xl font-black text-black tracking-tight">Have something to lend?</h2>
-        <p className="text-sm text-gray-400 mt-2">Earn from idle items in your home</p>
-        <Link href="/login" className="mt-6 inline-block btn-primary px-8 rounded-full">
-          Start lending
-        </Link>
+      {/* How it works */}
+      <section className="max-w-5xl mx-auto px-5 py-12 mt-4">
+        <div className="border border-gray-100 rounded-2xl p-8">
+          <span style={{ fontFamily: 'var(--font-display)' }} className="text-xs font-bold tracking-widest text-gray-400 uppercase">How it works</span>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mt-6">
+            {[
+              { num: '01', title: 'Browse & book', desc: 'Find what you need from neighbours nearby' },
+              { num: '02', title: 'Pay & pickup', desc: 'Pay via UPI and pick up from the owner' },
+              { num: '03', title: 'Return & review', desc: 'Return when done and leave a review' },
+            ].map((s) => (
+              <div key={s.num}>
+                <span style={{ fontFamily: 'var(--font-display)' }} className="text-3xl font-black text-gray-100">{s.num}</span>
+                <p className="text-sm font-semibold text-black mt-2">{s.title}</p>
+                <p className="text-xs text-gray-400 mt-1 leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
+
+      {/* CTA */}
+      <section className="max-w-5xl mx-auto px-5 py-8 pb-20">
+        <div className="bg-black rounded-2xl px-8 py-10 text-center">
+          <span style={{ fontFamily: 'var(--font-display)' }} className="text-xs font-bold tracking-widest text-gray-500 uppercase">For owners</span>
+          <h2 style={{ fontFamily: 'var(--font-display)' }} className="text-3xl font-black text-white mt-3 tracking-tight">
+            Your stuff is<br />
+            <span className="italic font-normal">earning nothing.</span>
+          </h2>
+          <p className="text-gray-400 text-sm mt-3">List your idle items and earn from your community</p>
+          <Link href="/login" className="mt-6 inline-block bg-white text-black font-medium text-sm px-8 py-3 rounded-full hover:bg-gray-100 transition-colors">
+            Start lending →
+          </Link>
+        </div>
+      </section>
+
+      <style>{`
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   )
 }
