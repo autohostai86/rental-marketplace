@@ -20,7 +20,6 @@ export default function LoginPage() {
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}/auth/confirm`,
       },
     })
     setLoading(false)
@@ -70,7 +69,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-xs text-gray-300">
-          We'll send a magic link to your inbox
+          We'll send a 6-digit code to your inbox
         </p>
       </div>
     </div>
