@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 
 export default function VerifyPage() {
   const [email, setEmail] = useState('')
-  const [otp, setOtp] = useState(['', '', '', '', '', ''])
+  const [otp, setOtp] = useState(['', '', '', '', '', '', '', ''])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
@@ -24,7 +24,7 @@ export default function VerifyPage() {
     const next = [...otp]
     next[index] = value.slice(-1)
     setOtp(next)
-    if (value && index < 5) inputRefs.current[index + 1]?.focus()
+    if (value && index < 7) inputRefs.current[index + 1]?.focus()
   }
 
   function handleKeyDown(index: number, e: React.KeyboardEvent<HTMLInputElement>) {
@@ -40,7 +40,7 @@ export default function VerifyPage() {
     const next = [...otp]
     pasted.split('').forEach((ch, i) => { next[i] = ch })
     setOtp(next)
-    const focusIndex = Math.min(pasted.length, 5)
+    const focusIndex = Math.min(pasted.length, 7)
     inputRefs.current[focusIndex]?.focus()
   }
 
@@ -84,7 +84,7 @@ export default function VerifyPage() {
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
           <h1 className="text-3xl font-black tracking-tighter text-black">BORRO</h1>
-          <p className="mt-2 text-sm text-gray-400">Enter the 6-digit code we sent to</p>
+          <p className="mt-2 text-sm text-gray-400">Enter the 8-digit code we sent to</p>
           <p className="mt-1 text-sm font-medium text-black">{email}</p>
         </div>
 
