@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { formatPrice, formatDatetime, maskPhone } from '@/lib/formatters'
 import type { Booking } from '@/types'
+import CountdownTimer from '@/components/CountdownTimer'
 
 export default function BookingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
@@ -87,6 +88,14 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
 
       {/* Status */}
       <StatusBadge status={booking.status} />
+
+      {/* Countdown timer — active rentals only */}
+      {booking.status === 'active' && (
+        <div className="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
+          <p className="text-sm font-medium text-gray-500">Time remaining</p>
+          <CountdownTimer endDatetime={booking.end_datetime} />
+        </div>
+      )}
 
       {/* Lender contact — only after acceptance */}
       {isAcceptedOrBeyond && (

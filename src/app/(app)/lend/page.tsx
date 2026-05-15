@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { formatPrice, formatDatetime, formatRelativeTime } from '@/lib/formatters'
 import type { Booking } from '@/types'
+import CountdownTimer from '@/components/CountdownTimer'
 
 export default function LendPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
@@ -103,7 +104,10 @@ function ActiveBookingCard({ booking }: { booking: Booking }) {
         )}
         <div className="flex-1 min-w-0">
           <p className="font-medium text-black truncate">{item?.title}</p>
-          <p className="text-xs text-gray-400 mt-0.5">Due back {formatDatetime(booking.end_datetime)}</p>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <p className="text-xs text-gray-400">Due back</p>
+            <CountdownTimer endDatetime={booking.end_datetime} />
+          </div>
           {!booking.payment_confirmed && <p className="text-xs text-red-400 mt-0.5">Payment not confirmed</p>}
         </div>
         <span className="text-xs font-medium bg-black text-white px-2 py-1 rounded-full shrink-0">Active</span>
