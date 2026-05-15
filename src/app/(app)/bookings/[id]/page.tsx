@@ -90,7 +90,7 @@ export default function BookingDetailPage({ params }: { params: Promise<{ id: st
       <StatusBadge status={booking.status} />
 
       {/* Countdown timer — active rentals only */}
-      {booking.status === 'active' && (
+      {booking.status === 'active' && booking.payment_confirmed && (
         <div className="bg-gray-50 rounded-xl p-4 flex items-center justify-between">
           <p className="text-sm font-medium text-gray-500">Time remaining</p>
           <CountdownTimer endDatetime={booking.end_datetime} />
