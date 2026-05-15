@@ -138,7 +138,10 @@ export default function ProfilePage() {
       <div>
         <div className="flex items-center justify-between mb-3">
           <p className="text-sm font-semibold text-gray-700">My Listings ({items.length})</p>
-          <Link href="/items/new" className="text-sm text-indigo-600 font-medium">+ Add item</Link>
+          <div className="flex gap-3">
+            <Link href="/items/bulk" className="text-sm text-gray-400 hover:text-black font-medium transition-colors">Bulk upload</Link>
+            <Link href="/items/new" className="text-sm text-indigo-600 font-medium">+ Add item</Link>
+          </div>
         </div>
 
         {items.length === 0 ? (
