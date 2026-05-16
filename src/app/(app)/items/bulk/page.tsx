@@ -10,13 +10,13 @@ const VALID_CONDITIONS: string[] = ITEM_CONDITIONS.map(c => c.value)
 const CSV_HEADERS = [
   'title', 'description', 'category', 'condition',
   'inventory', 'address_hint',
-  'price_hourly', 'price_daily', 'price_weekly', 'price_monthly',
+  'price_daily', 'price_weekly', 'price_monthly',
 ]
 
 const TEMPLATE_ROW = [
   'Bosch Drill', 'Corded drill in good condition', 'Hardware Tools', 'good',
   '1', 'Near INOX',
-  '', '150', '', '',
+  '150', '', '',
 ]
 
 interface ParsedRow {
@@ -26,7 +26,6 @@ interface ParsedRow {
   condition: string
   inventory: number
   address_hint: string
-  price_hourly: number | null
   price_daily: number | null
   price_weekly: number | null
   price_monthly: number | null
@@ -66,7 +65,6 @@ function validateRow(cols: string[], headers: string[]): ParsedRow {
   const inventoryRaw = get('inventory')
   const inventory = parseInt(inventoryRaw) || 1
 
-  const price_hourly  = parseFloat(get('price_hourly'))  || null
   const price_daily   = parseFloat(get('price_daily'))   || null
   const price_weekly  = parseFloat(get('price_weekly'))  || null
   const price_monthly = parseFloat(get('price_monthly')) || null
@@ -74,12 +72,12 @@ function validateRow(cols: string[], headers: string[]): ParsedRow {
   if (!title) errors.push('Title required')
   if (!VALID_CATEGORIES.includes(category)) errors.push(`Invalid category: "${category}"`)
   if (!VALID_CONDITIONS.includes(condition)) errors.push(`Invalid condition: "${condition}"`)
-  if (!price_hourly && !price_daily && !price_weekly && !price_monthly) errors.push('At least one price required')
+  if (!price_daily && !price_weekly && !price_monthly) errors.push('At least one price required')
 
   return {
     title, description: get('description'), category, condition,
     inventory, address_hint: get('address_hint'),
-    price_hourly, price_daily, price_weekly, price_monthly,
+    price_daily, price_weekly, price_monthly,
     _errors: errors,
   }
 }

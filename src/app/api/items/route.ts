@@ -23,19 +23,18 @@ export async function GET(request: Request) {
   if (ownerId)   query = query.eq('owner_id', ownerId)
   if (q)         query = query.ilike('title', `%${q}%`)
 
-  if (duration === 'hourly')  query = query.not('price_hourly',  'is', null)
   if (duration === 'daily')   query = query.not('price_daily',   'is', null)
   if (duration === 'weekly')  query = query.not('price_weekly',  'is', null)
   if (duration === 'monthly') query = query.not('price_monthly', 'is', null)
 
   if (minPrice) {
     query = query.or(
-      `price_daily.gte.${minPrice},price_hourly.gte.${minPrice},price_weekly.gte.${minPrice},price_monthly.gte.${minPrice}`
+      `price_daily.gte.${minPrice},price_weekly.gte.${minPrice},price_monthly.gte.${minPrice}`
     )
   }
   if (maxPrice) {
     query = query.or(
-      `price_daily.lte.${maxPrice},price_hourly.lte.${maxPrice},price_weekly.lte.${maxPrice},price_monthly.lte.${maxPrice}`
+      `price_daily.lte.${maxPrice},price_weekly.lte.${maxPrice},price_monthly.lte.${maxPrice}`
     )
   }
 
@@ -53,7 +52,7 @@ export async function POST(request: Request) {
   const body = await request.json()
   const {
     title, description, category, condition, images,
-    inventory, price_hourly, price_daily, price_weekly, price_monthly,
+    inventory, price_daily, price_weekly, price_monthly,
     locality, address_hint,
   } = body
 
@@ -61,7 +60,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  if (!price_hourly && !price_daily && !price_weekly && !price_monthly) {
+  if (!price_daily && !price_weekly && !price_monthly) {
     return NextResponse.json({ error: 'At least one price is required' }, { status: 400 })
   }
 
@@ -71,7 +70,6 @@ export async function POST(request: Request) {
       owner_id: user.id,
       title, description, category, condition,
       images, inventory: inventory ?? 1,
-      price_hourly:  price_hourly  || null,
       price_daily:   price_daily   || null,
       price_weekly:  price_weekly  || null,
       price_monthly: price_monthly || null,

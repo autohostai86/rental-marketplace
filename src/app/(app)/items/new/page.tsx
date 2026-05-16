@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { CATEGORIES, ITEM_CONDITIONS } from '@/types'
 
 interface PricingState {
-  hourly:  { enabled: boolean; price: string }
   daily:   { enabled: boolean; price: string }
   weekly:  { enabled: boolean; price: string }
   monthly: { enabled: boolean; price: string }
@@ -27,7 +26,6 @@ export default function NewItemPage() {
 
   // Step 2
   const [pricing, setPricing] = useState<PricingState>({
-    hourly:  { enabled: false, price: '' },
     daily:   { enabled: true,  price: '' },
     weekly:  { enabled: false, price: '' },
     monthly: { enabled: false, price: '' },
@@ -74,7 +72,6 @@ export default function NewItemPage() {
       inventory: parseInt(inventory) || 1,
       address_hint: addressHint,
       images,
-      price_hourly:  pricing.hourly.enabled  && pricing.hourly.price  ? parseFloat(pricing.hourly.price)  : null,
       price_daily:   pricing.daily.enabled   && pricing.daily.price   ? parseFloat(pricing.daily.price)   : null,
       price_weekly:  pricing.weekly.enabled  && pricing.weekly.price  ? parseFloat(pricing.weekly.price)  : null,
       price_monthly: pricing.monthly.enabled && pricing.monthly.price ? parseFloat(pricing.monthly.price) : null,

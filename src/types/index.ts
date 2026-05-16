@@ -1,7 +1,7 @@
 export type ItemStatus = 'draft' | 'available' | 'paused' | 'deleted' | 'rented_out'
 export type ItemCondition = 'new' | 'like_new' | 'good' | 'fair'
 export type BookingStatus = 'pending' | 'accepted' | 'rejected' | 'active' | 'completed' | 'cancelled'
-export type DurationUnit = 'hourly' | 'daily' | 'weekly' | 'monthly'
+export type DurationUnit = 'daily' | 'weekly' | 'monthly'
 export type ReviewerRole = 'borrower' | 'lender'
 export type NotificationType =
   | 'booking_request'
@@ -37,7 +37,6 @@ export interface Item {
   condition: ItemCondition
   images: string[]
   inventory: number
-  price_hourly: number | null
   price_daily: number | null
   price_weekly: number | null
   price_monthly: number | null
@@ -119,7 +118,6 @@ export const CATEGORIES = [
 export type Category = (typeof CATEGORIES)[number]
 
 export const DURATION_UNITS: { value: DurationUnit; label: string; shortLabel: string }[] = [
-  { value: 'hourly',  label: 'Per Hour',  shortLabel: '/hr'  },
   { value: 'daily',   label: 'Per Day',   shortLabel: '/day' },
   { value: 'weekly',  label: 'Per Week',  shortLabel: '/wk'  },
   { value: 'monthly', label: 'Per Month', shortLabel: '/mo'  },

@@ -6,7 +6,6 @@ import { CATEGORIES, ITEM_CONDITIONS } from '@/types'
 import type { Item } from '@/types'
 
 interface PricingState {
-  hourly:  { enabled: boolean; price: string }
   daily:   { enabled: boolean; price: string }
   weekly:  { enabled: boolean; price: string }
   monthly: { enabled: boolean; price: string }
@@ -29,7 +28,6 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
   const [addressHint, setAddressHint] = useState('')
   const [images, setImages] = useState<string[]>([])
   const [pricing, setPricing] = useState<PricingState>({
-    hourly:  { enabled: false, price: '' },
     daily:   { enabled: true,  price: '' },
     weekly:  { enabled: false, price: '' },
     monthly: { enabled: false, price: '' },
@@ -48,7 +46,6 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
         setAddressHint(item.address_hint ?? '')
         setImages(item.images)
         setPricing({
-          hourly:  { enabled: item.price_hourly  != null, price: String(item.price_hourly  ?? '') },
           daily:   { enabled: item.price_daily   != null, price: String(item.price_daily   ?? '') },
           weekly:  { enabled: item.price_weekly  != null, price: String(item.price_weekly  ?? '') },
           monthly: { enabled: item.price_monthly != null, price: String(item.price_monthly ?? '') },
@@ -93,7 +90,6 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
         inventory: parseInt(inventory) || 1,
         address_hint: addressHint,
         images,
-        price_hourly:  pricing.hourly.enabled  && pricing.hourly.price  ? parseFloat(pricing.hourly.price)  : null,
         price_daily:   pricing.daily.enabled   && pricing.daily.price   ? parseFloat(pricing.daily.price)   : null,
         price_weekly:  pricing.weekly.enabled  && pricing.weekly.price  ? parseFloat(pricing.weekly.price)  : null,
         price_monthly: pricing.monthly.enabled && pricing.monthly.price ? parseFloat(pricing.monthly.price) : null,

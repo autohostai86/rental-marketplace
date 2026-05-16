@@ -28,7 +28,6 @@ export default async function BrowsePage({
 
   if (sp.q)             query = query.ilike('title', `%${sp.q}%`)
   if (sp.category)      query = query.eq('category', sp.category)
-  if (sp.duration_unit === 'hourly')  query = query.not('price_hourly',  'is', null)
   if (sp.duration_unit === 'daily')   query = query.not('price_daily',   'is', null)
   if (sp.duration_unit === 'weekly')  query = query.not('price_weekly',  'is', null)
   if (sp.duration_unit === 'monthly') query = query.not('price_monthly', 'is', null)
@@ -54,7 +53,6 @@ export default async function BrowsePage({
       <div className="flex gap-2 mt-3 overflow-x-auto pb-1 scrollbar-hide">
         {[
           { label: 'Any',     value: '' },
-          { label: 'Hourly',  value: 'hourly'  },
           { label: 'Daily',   value: 'daily'   },
           { label: 'Weekly',  value: 'weekly'  },
           { label: 'Monthly', value: 'monthly' },

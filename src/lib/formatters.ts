@@ -7,7 +7,7 @@ export function formatPrice(amount: number): string {
 
 export function formatDurationUnit(unit: DurationUnit): string {
   const map: Record<DurationUnit, string> = {
-    hourly: '/hr', daily: '/day', weekly: '/wk', monthly: '/mo',
+    daily: '/day', weekly: '/wk', monthly: '/mo',
   }
   return map[unit]
 }

@@ -8,7 +8,6 @@ interface BulkItem {
   condition: string
   inventory: number
   address_hint?: string
-  price_hourly?: number | null
   price_daily?: number | null
   price_weekly?: number | null
   price_monthly?: number | null
@@ -36,7 +35,6 @@ export async function POST(request: Request) {
           condition:     item.condition,
           images:        [],
           inventory:     item.inventory ?? 1,
-          price_hourly:  item.price_hourly  || null,
           price_daily:   item.price_daily   || null,
           price_weekly:  item.price_weekly  || null,
           price_monthly: item.price_monthly || null,
