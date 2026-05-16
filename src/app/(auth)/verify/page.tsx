@@ -83,7 +83,7 @@ export default function VerifyPage() {
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
-          <h1 className="text-3xl font-black tracking-tighter text-black">BORRO</h1>
+          <img src="/logo.svg" alt="Borro" className="h-10 w-auto mx-auto" />
           <p className="mt-2 text-sm text-gray-400">Enter the 8-digit code we sent to</p>
           <p className="mt-1 text-sm font-medium text-black">{email}</p>
         </div>

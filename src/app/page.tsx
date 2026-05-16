@@ -19,7 +19,7 @@ export default async function LandingPage() {
       {/* Nav */}
       <header className="sticky top-0 z-40 bg-white border-b border-gray-100">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-          <span className="text-black font-black text-xl tracking-tighter">BORRO</span>
+          <img src="/logo.svg" alt="Borro" className="h-8 w-auto" />
           <div className="flex gap-2 items-center">
             <Link href="/browse" className="text-sm text-gray-500 hover:text-black px-3 py-1.5 transition-colors">Browse</Link>
             <Link href="/login" className="btn-primary text-sm py-1.5 px-4 rounded-full">Get started</Link>
