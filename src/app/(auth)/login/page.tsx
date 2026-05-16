@@ -1,5 +1,6 @@
 'use client'
 
+import Logo from '@/components/Logo'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -37,7 +38,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm">
         <div className="mb-10 text-center">
-          <img src="/logo.svg" alt="Borro" className="h-10 w-auto mx-auto" />
+          <Logo className="h-10 w-auto mx-auto" />
           <p className="mt-2 text-sm text-gray-400">Enter your email to get started</p>
         </div>
 
