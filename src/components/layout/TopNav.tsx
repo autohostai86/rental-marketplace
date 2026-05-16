@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -24,8 +25,8 @@ export default function TopNav({ unreadCount = 0 }: TopNavProps) {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-gray-200">
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
-        <Link href="/" className="text-black font-black text-xl tracking-tighter shrink-0">
-          BORRO
+        <Link href="/" className="shrink-0">
+          <Image src="/logo.svg" alt="Borro" width={80} height={32} priority />
         </Link>
 
         {isBrowse && (
