@@ -6,14 +6,50 @@ import { getLowestPrice } from '@/lib/pricing'
 import type { Item } from '@/types'
 import { CATEGORIES } from '@/types'
 
+function ItemCard({ item }: { item: Item }) {
+  const lowest = getLowestPrice(item)
+  return (
+    <Link
+      href={`/items/${item.id}`}
+      className="w-40 shrink-0 bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-gray-300 transition-colors group"
+    >
+      <div className="aspect-square bg-gray-50">
+        {item.images?.[0] ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-4xl text-gray-200">📦</div>
+        )}
+      </div>
+      <div className="p-3">
+        <p className="text-sm font-medium text-black truncate">{item.title}</p>
+        {lowest && (
+          <p className="text-xs text-gray-500 mt-0.5">
+            from {formatPrice(lowest.price)}
+            <span className="text-gray-400">{formatDurationUnit(lowest.unit)}</span>
+          </p>
+        )}
+      </div>
+    </Link>
+  )
+}
+
 export default async function LandingPage() {
   const supabase = await createClient()
-  const { data: items } = await supabase
+  const { data: raw } = await supabase
     .from('items')
     .select('*, owner:profiles(id, full_name)')
     .eq('status', 'available')
+    .order('category')
     .order('created_at', { ascending: false })
-    .limit(12)
+    .limit(100)
+
+  const items = (raw ?? []) as Item[]
+  const byCategory = CATEGORIES.reduce<Record<string, Item[]>>((acc, cat) => {
+    const catItems = items.filter(i => i.category === cat).slice(0, 6)
+    if (catItems.length > 0) acc[cat] = catItems
+    return acc
+  }, {})
 
   return (
     <div className="min-h-screen bg-white">
@@ -56,42 +92,27 @@ export default async function LandingPage() {
         </div>
       </section>
 
-      {/* Listings */}
+      {/* Listings by category */}
       <section className="max-w-4xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-sm font-semibold text-black">Available now</p>
-          <Link href="/browse" className="text-xs text-gray-400 hover:text-black transition-colors">See all →</Link>
-        </div>
-
-        {!items?.length ? (
+        {Object.keys(byCategory).length === 0 ? (
           <p className="text-center text-gray-300 py-16 text-sm">No listings yet — be the first!</p>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {items.map((item) => {
-              const lowest = getLowestPrice(item as Item)
-              return (
-                <Link key={item.id} href={`/items/${item.id}`} className="bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-gray-300 transition-colors group">
-                  <div className="aspect-square bg-gray-50">
-                    {item.images?.[0] ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl text-gray-200">📦</div>
-                    )}
-                  </div>
-                  <div className="p-3">
-                    <p className="text-sm font-medium text-black truncate">{item.title}</p>
-                    {lowest && (
-                      <p className="text-xs text-gray-500 mt-0.5">
-                        from {formatPrice(lowest.price)}
-                        <span className="text-gray-400">{formatDurationUnit(lowest.unit)}</span>
-                      </p>
-                    )}
-                  </div>
+          Object.entries(byCategory).map(([category, catItems]) => (
+            <div key={category} className="mb-8">
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-semibold text-black">{category}</p>
+                <Link
+                  href={`/browse?category=${encodeURIComponent(category)}`}
+                  className="text-xs text-gray-400 hover:text-black transition-colors"
+                >
+                  See all →
                 </Link>
-              )
-            })}
-          </div>
+              </div>
+              <div className="flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4">
+                {catItems.map(item => <ItemCard key={item.id} item={item} />)}
+              </div>
+            </div>
+          ))
         )}
       </section>
 
