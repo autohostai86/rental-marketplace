@@ -25,6 +25,7 @@ export default function NewItemPage() {
   const [addressHint, setAddressHint] = useState('')
 
   // Step 2
+  const [isFree, setIsFree] = useState(false)
   const [pricing, setPricing] = useState<PricingState>({
     daily:   { enabled: true,  price: '' },
     weekly:  { enabled: false, price: '' },
@@ -63,7 +64,9 @@ export default function NewItemPage() {
   async function handleSubmit() {
     setError(null)
     if (images.length === 0) { setError('Please upload at least one image'); return }
-    const hasPricing = Object.values(pricing).some((p) => p.enabled && p.price)
+    const hasPricing = isFree || Object.values(pricing).some(
+      (p) => p.enabled && p.price !== '' && !isNaN(parseFloat(p.price))
+    )
     if (!hasPricing) { setError('Please set at least one price'); return }
 
     setLoading(true)
@@ -72,9 +75,9 @@ export default function NewItemPage() {
       inventory: parseInt(inventory) || 1,
       address_hint: addressHint,
       images,
-      price_daily:   pricing.daily.enabled   && pricing.daily.price   ? parseFloat(pricing.daily.price)   : null,
-      price_weekly:  pricing.weekly.enabled  && pricing.weekly.price  ? parseFloat(pricing.weekly.price)  : null,
-      price_monthly: pricing.monthly.enabled && pricing.monthly.price ? parseFloat(pricing.monthly.price) : null,
+      price_daily:   isFree ? 0 : (pricing.daily.enabled   && pricing.daily.price   !== '' ? parseFloat(pricing.daily.price)   : null),
+      price_weekly:  isFree ? null : (pricing.weekly.enabled  && pricing.weekly.price  !== '' ? parseFloat(pricing.weekly.price)  : null),
+      price_monthly: isFree ? null : (pricing.monthly.enabled && pricing.monthly.price !== '' ? parseFloat(pricing.monthly.price) : null),
     }
 
     const res = await fetch('/api/items', {
@@ -185,7 +188,21 @@ export default function NewItemPage() {
         <div className="space-y-4">
           <p className="text-sm text-gray-500">Select the durations you want to offer and set prices in ₹</p>
 
-          {(Object.entries(pricing) as [keyof PricingState, PricingState[keyof PricingState]][]).map(([unit, val]) => (
+          {/* Free option */}
+          <button
+            type="button"
+            onClick={() => setIsFree(!isFree)}
+            className={`flex items-center justify-between w-full p-3 rounded-lg border transition-colors ${
+              isFree ? 'border-black bg-black text-white' : 'border-gray-200 bg-white text-gray-700'
+            }`}
+          >
+            <span className="text-sm font-medium">Free</span>
+            <span className={`text-xs ${isFree ? 'text-gray-300' : 'text-gray-400'}`}>
+              {isFree ? 'No charge to borrow' : 'Lend at no cost'}
+            </span>
+          </button>
+
+          {!isFree && (Object.entries(pricing) as [keyof PricingState, PricingState[keyof PricingState]][]).map(([unit, val]) => (
             <div key={unit} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
               <input
                 type="checkbox"

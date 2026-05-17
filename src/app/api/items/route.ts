@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  if (!price_daily && !price_weekly && !price_monthly) {
+  if (price_daily == null && price_weekly == null && price_monthly == null) {
     return NextResponse.json({ error: 'At least one price is required' }, { status: 400 })
   }
 
@@ -70,9 +70,9 @@ export async function POST(request: Request) {
       owner_id: user.id,
       title, description, category, condition,
       images, inventory: inventory ?? 1,
-      price_daily:   price_daily   || null,
-      price_weekly:  price_weekly  || null,
-      price_monthly: price_monthly || null,
+      price_daily:   price_daily   ?? null,
+      price_weekly:  price_weekly  ?? null,
+      price_monthly: price_monthly ?? null,
       locality: locality ?? 'Diamond District',
       address_hint,
       status: 'available',

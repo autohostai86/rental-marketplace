@@ -27,6 +27,7 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
   const [inventory, setInventory] = useState('1')
   const [addressHint, setAddressHint] = useState('')
   const [images, setImages] = useState<string[]>([])
+  const [isFree, setIsFree] = useState(false)
   const [pricing, setPricing] = useState<PricingState>({
     daily:   { enabled: true,  price: '' },
     weekly:  { enabled: false, price: '' },
@@ -45,10 +46,12 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
         setInventory(String(item.inventory))
         setAddressHint(item.address_hint ?? '')
         setImages(item.images)
+        const free = item.price_daily === 0 && item.price_weekly == null && item.price_monthly == null
+        setIsFree(free)
         setPricing({
-          daily:   { enabled: item.price_daily   != null, price: String(item.price_daily   ?? '') },
-          weekly:  { enabled: item.price_weekly  != null, price: String(item.price_weekly  ?? '') },
-          monthly: { enabled: item.price_monthly != null, price: String(item.price_monthly ?? '') },
+          daily:   { enabled: !free && item.price_daily   != null, price: !free ? String(item.price_daily   ?? '') : '' },
+          weekly:  { enabled: !free && item.price_weekly  != null, price: !free ? String(item.price_weekly  ?? '') : '' },
+          monthly: { enabled: !free && item.price_monthly != null, price: !free ? String(item.price_monthly ?? '') : '' },
         })
         setLoading(false)
       })
@@ -78,7 +81,9 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
     setError(null)
     if (!title.trim()) { setError('Title is required'); return }
     if (images.length === 0) { setError('At least one image is required'); return }
-    const hasPricing = Object.values(pricing).some((p) => p.enabled && p.price)
+    const hasPricing = isFree || Object.values(pricing).some(
+      (p) => p.enabled && p.price !== '' && !isNaN(parseFloat(p.price))
+    )
     if (!hasPricing) { setError('At least one price is required'); return }
 
     setSaving(true)
@@ -90,9 +95,9 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
         inventory: parseInt(inventory) || 1,
         address_hint: addressHint,
         images,
-        price_daily:   pricing.daily.enabled   && pricing.daily.price   ? parseFloat(pricing.daily.price)   : null,
-        price_weekly:  pricing.weekly.enabled  && pricing.weekly.price  ? parseFloat(pricing.weekly.price)  : null,
-        price_monthly: pricing.monthly.enabled && pricing.monthly.price ? parseFloat(pricing.monthly.price) : null,
+        price_daily:   isFree ? 0 : (pricing.daily.enabled   && pricing.daily.price   !== '' ? parseFloat(pricing.daily.price)   : null),
+        price_weekly:  isFree ? null : (pricing.weekly.enabled  && pricing.weekly.price  !== '' ? parseFloat(pricing.weekly.price)  : null),
+        price_monthly: isFree ? null : (pricing.monthly.enabled && pricing.monthly.price !== '' ? parseFloat(pricing.monthly.price) : null),
       }),
     })
     const data = await res.json()
@@ -191,7 +196,21 @@ export default function EditItemPage({ params }: { params: Promise<{ id: string 
       <div>
         <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Pricing</label>
         <div className="space-y-2">
-          {(Object.entries(pricing) as [keyof PricingState, PricingState[keyof PricingState]][]).map(([unit, val]) => (
+          {/* Free option */}
+          <button
+            type="button"
+            onClick={() => setIsFree(!isFree)}
+            className={`flex items-center justify-between w-full p-3 rounded-lg border transition-colors ${
+              isFree ? 'border-black bg-black text-white' : 'border-gray-100 bg-white text-gray-700'
+            }`}
+          >
+            <span className="text-sm font-medium">Free</span>
+            <span className={`text-xs ${isFree ? 'text-gray-300' : 'text-gray-400'}`}>
+              {isFree ? 'No charge to borrow' : 'Lend at no cost'}
+            </span>
+          </button>
+
+          {!isFree && (Object.entries(pricing) as [keyof PricingState, PricingState[keyof PricingState]][]).map(([unit, val]) => (
             <div key={unit} className="flex items-center gap-3 p-3 border border-gray-100 rounded-lg">
               <input type="checkbox" id={`chk-${unit}`} checked={val.enabled}
                 onChange={(e) => setPricing((p) => ({ ...p, [unit]: { ...p[unit], enabled: e.target.checked } }))}

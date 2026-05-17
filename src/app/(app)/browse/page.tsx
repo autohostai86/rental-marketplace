@@ -133,10 +133,12 @@ function ItemCard({ item }: { item: Item }) {
       </div>
       <div className="p-2.5">
         <p className="text-sm font-medium text-black truncate">{item.title}</p>
-        {lowest && (
-          <p className="text-xs text-gray-500 mt-0.5">
-            from {formatPrice(lowest.price)}
-            <span className="text-gray-400">{formatDurationUnit(lowest.unit)}</span>
+        {lowest != null && (
+          <p className="text-xs mt-0.5">
+            {lowest.price === 0
+              ? <span className="text-green-600 font-medium">Free</span>
+              : <span className="text-gray-500">from {formatPrice(lowest.price)}<span className="text-gray-400">{formatDurationUnit(lowest.unit)}</span></span>
+            }
           </p>
         )}
         {item.avg_rating != null && (

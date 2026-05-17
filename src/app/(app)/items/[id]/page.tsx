@@ -66,8 +66,8 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
   const owner      = item.owner as { full_name?: string; avatar_url?: string; avg_rating?: number } | undefined
   const units      = getAvailableUnits(item)
   const price      = getPriceForUnit(item, durationUnit)
-  const total      = price ? calculateTotalPrice(price, durationCount) : 0
-  const end        = price ? calculateEndDatetime(new Date(startDate), durationUnit, durationCount) : null
+  const total      = price != null ? calculateTotalPrice(price, durationCount) : 0
+  const end        = price != null ? calculateEndDatetime(new Date(startDate), durationUnit, durationCount) : null
   const isRentedOut = item.status === 'rented_out'
 
   return (
@@ -135,7 +135,10 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
                 <div key={value} className="flex justify-between text-sm">
                   <span className="text-gray-600">{label}</span>
                   <span className="font-semibold text-gray-900">
-                    {formatPrice(p)}<span className="text-gray-400 font-normal">{shortLabel}</span>
+                    {p === 0
+                      ? <span className="text-green-600">Free</span>
+                      : <>{formatPrice(p)}<span className="text-gray-400 font-normal">{shortLabel}</span></>
+                    }
                   </span>
                 </div>
               )
@@ -209,12 +212,17 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
                   <button onClick={() => setDurationCount((c) => c + 1)} className="px-2 py-1 text-gray-500 hover:bg-gray-50">+</button>
                 </div>
               </div>
-              {price && end && (
+              {price != null && end && (
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-500">
-                    {durationCount} × {formatPrice(price)}{formatDurationUnit(durationUnit)}
+                    {price === 0
+                      ? `${durationCount} × Free`
+                      : `${durationCount} × ${formatPrice(price)}${formatDurationUnit(durationUnit)}`
+                    }
                   </span>
-                  <span className="font-bold text-gray-900">{formatPrice(total)}</span>
+                  <span className="font-bold text-gray-900">
+                    {price === 0 ? <span className="text-green-600">Free</span> : formatPrice(total)}
+                  </span>
                 </div>
               )}
               <textarea
@@ -227,10 +235,10 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
               {bookError && <p className="text-xs text-red-500">{bookError}</p>}
               <button
                 onClick={handleBook}
-                disabled={booking || !price}
+                disabled={booking || price == null}
                 className="btn-primary w-full"
               >
-                {booking ? 'Booking…' : `Book for ${formatPrice(total)}`}
+                {booking ? 'Booking…' : price === 0 ? 'Request to borrow (Free)' : `Book for ${formatPrice(total)}`}
               </button>
             </>
           ) : (
