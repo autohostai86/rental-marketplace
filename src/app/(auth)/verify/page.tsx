@@ -35,7 +35,7 @@ export default function VerifyPage() {
   }
 
   function handlePaste(e: React.ClipboardEvent) {
-    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
+    const pasted = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 8)
     if (!pasted) return
     e.preventDefault()
     const next = [...otp]
@@ -48,7 +48,7 @@ export default function VerifyPage() {
   async function handleVerify(e: React.FormEvent) {
     e.preventDefault()
     const token = otp.join('')
-    if (token.length < 6) return
+    if (token.length < 8) return
     setError(null)
     setLoading(true)
 
@@ -62,7 +62,7 @@ export default function VerifyPage() {
     if (error) {
       setLoading(false)
       setError(error.message)
-      setOtp(['', '', '', '', '', ''])
+      setOtp(['', '', '', '', '', '', '', ''])
       inputRefs.current[0]?.focus()
       return
     }
