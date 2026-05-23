@@ -69,7 +69,7 @@ export default async function LandingPage() {
       {/* Hero */}
       <section className="bg-black text-white px-4 py-20 text-center">
         <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-4">Diamond District, Bangalore</p>
-        <h1 className="text-4xl font-black tracking-tight leading-tight">Rent anything.<br/>From neighbours.</h1>
+        <h1 className="text-4xl font-black tracking-tight leading-tight">Rent anything.<br/>From neighbours<br/>IN 20 MINUTES</h1>
         <p className="mt-4 text-gray-400 max-w-xs mx-auto text-sm">
           Drills, toys, gadgets and more — by the hour, day, or week.
         </p>
