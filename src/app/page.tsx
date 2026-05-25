@@ -1,4 +1,5 @@
 import Logo from '@/components/Logo'
+import RequestForm from '@/components/RequestForm'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { formatPrice, formatDurationUnit } from '@/lib/formatters'
@@ -126,6 +127,8 @@ export default async function LandingPage() {
         <Link href="/login" className="mt-6 inline-block btn-primary px-8 rounded-full">
           Start lending
         </Link>
+        <p className="text-sm text-gray-400 mt-10">Unable to find what you are looking for?</p>
+        <RequestForm />
       </section>
     </div>
   )
