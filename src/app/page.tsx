@@ -127,7 +127,7 @@ export default async function LandingPage() {
         <Link href="/login" className="mt-6 inline-block btn-primary px-8 rounded-full">
           Start lending
         </Link>
-        <p className="text-sm text-gray-400 mt-10">Unable to find what you are looking for?</p>
+        <p className="text-base font-semibold text-gray-500 mt-10">Unable to find what you are looking for?</p>
         <RequestForm />
       </section>
     </div>
