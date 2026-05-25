@@ -1,15 +1,24 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 
 export default function RequestForm() {
   const [value, setValue] = useState('')
   const [state, setState] = useState<'idle' | 'loading' | 'done'>('idle')
+  const router = useRouter()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!value.trim()) return
     setState('loading')
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      router.push('/login')
+      return
+    }
     await fetch('/api/item-requests', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
