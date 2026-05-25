@@ -113,6 +113,7 @@ export const CATEGORIES = [
   'Sports & Fitness',
   'Party & Events',
   'Stationery',
+  'Office',
   'Others',
 ] as const
 
