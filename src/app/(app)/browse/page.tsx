@@ -118,7 +118,7 @@ function ItemCard({ item }: { item: Item }) {
       <div className="relative aspect-square bg-gray-50">
         {item.images[0] ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.images[0]} alt={item.title} className="w-full h-full object-cover group-hover:opacity-90 transition-opacity" />
+          <img src={item.images[0]} alt={item.title} className="w-full h-full object-contain group-hover:opacity-90 transition-opacity" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-200 text-3xl">📦</div>
         )}

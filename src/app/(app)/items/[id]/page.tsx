@@ -76,7 +76,7 @@ export default function ItemDetailPage({ params }: { params: Promise<{ id: strin
       <div className="relative bg-gray-100" style={{ aspectRatio: '4/3' }}>
         {item.images[imgIdx] ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.images[imgIdx]} alt={item.title} className="w-full h-full object-cover" />
+          <img src={item.images[imgIdx]} alt={item.title} className="w-full h-full object-contain" />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-200">📦</div>
         )}
